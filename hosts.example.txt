@@ -1,0 +1,5 @@
+# One hostname per line. Blank lines and # comments are ignored.
+# Measure only hosts you operate or have explicit permission to test.
+example.nl
+mail.example.nl
+www.example.nl
