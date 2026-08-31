@@ -6,6 +6,11 @@ and **netnl**, a multi-tenant facade in front of a self-hosted batch instance.
 
 ## How it works
 
+**▶ [Live measurements (updated daily)](https://mwest2020.github.io/internetnl-cli-demo/)** —
+three real hosts, measured every day by a GitHub Action running the unmodified
+CLI against `https://api.westerweel.work`; the page renders the CLI's own
+`--json` output, committed to [`docs/data/latest.json`](docs/data/latest.json).
+
 An illustrated walk-through of the whole flow — host list → CLI → netnl facade
 → batch instance → verdicts, plus the commands and the deploy topology:
 

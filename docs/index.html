@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>netnl — live measurements</title>
+<meta name="description" content="Daily Internet.nl standards measurements of a real fleet, made by the unmodified internetnl CLI against a self-hosted netnl facade.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f3ec;
+    --panel: #fffdf8;
+    --ink: #1c1a16;
+    --ink-2: #57524a;
+    --ink-3: #8a8478;
+    --rule: #d8d2c4;
+    --accent: #1d4ed8;
+    --good: #0ca30c;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --good-ink: #0a7d0a;
+    --warning-ink: #8a6100;
+    --critical-ink: #b32f2f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #191713;
+      --panel: #211f1a;
+      --ink: #ece7dc;
+      --ink-2: #b3ac9e;
+      --ink-3: #7d766a;
+      --rule: #38342c;
+      --accent: #7ea2ff;
+      --good-ink: #3fbf3f;
+      --warning-ink: #fab219;
+      --critical-ink: #e06060;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: light dark; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 500px at 80% -10%, color-mix(in oklab, var(--accent) 7%, transparent), transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font: 400 15px/1.55 "IBM Plex Mono", ui-monospace, monospace;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  header.masthead {
+    border-bottom: 3px double var(--rule);
+    padding-bottom: 20px;
+    margin-bottom: 8px;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px;
+  }
+  .masthead h1 {
+    font-family: "Fraunces", serif; font-weight: 700;
+    font-size: clamp(30px, 5.5vw, 46px);
+    margin: 0; letter-spacing: -0.01em;
+  }
+  .masthead h1 .tld { color: var(--accent); }
+  .masthead .tagline { color: var(--ink-2); font-size: 13px; }
+
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 4px 28px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+    font-size: 12.5px; color: var(--ink-2);
+  }
+  .meta b { color: var(--ink); font-weight: 500; }
+  .meta .live-dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--good); margin-right: 6px;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: .35; } }
+
+  .intro { color: var(--ink-2); font-size: 13.5px; max-width: 68ch; margin: 22px 0 30px; }
+  .intro a { color: var(--accent); }
+  .intro code { white-space: nowrap; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 20px 20px 14px;
+    position: relative;
+    animation: rise .5s ease both;
+  }
+  .card:nth-child(2) { animation-delay: .08s; }
+  .card:nth-child(3) { animation-delay: .16s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+  .card h2 {
+    margin: 0 0 14px; font: 500 14px/1.3 "IBM Plex Mono", monospace;
+    word-break: break-all; color: var(--ink);
+  }
+  .card h2 a { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--ink-3); }
+  .score {
+    font-family: "Fraunces", serif; font-weight: 700;
+    font-size: 64px; line-height: 1; letter-spacing: -0.02em;
+    margin: 2px 0 2px;
+  }
+  .score .pct { font-size: 26px; color: var(--ink-3); font-weight: 500; }
+  .scorebar {
+    height: 6px; border-radius: 4px; background: color-mix(in oklab, var(--rule) 60%, transparent);
+    overflow: hidden; margin: 10px 0 16px;
+  }
+  .scorebar i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
+  .statuses { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; margin-bottom: 10px; }
+  .cats { display: grid; gap: 5px; margin: 0 0 14px; padding: 0; list-style: none; font-size: 12.5px; }
+  .cats li { display: flex; justify-content: space-between; gap: 12px; }
+  .cats li span:first-child { color: var(--ink-2); }
+  .st { white-space: nowrap; }
+  .st .n { font-weight: 600; }
+  .st-passed  { color: var(--good-ink); }
+  .st-failed  { color: var(--critical-ink); }
+  .st-warning { color: var(--warning-ink); }
+  .st-other   { color: var(--ink-3); }
+  .domain-error { color: var(--critical-ink); font-size: 13px; }
+
+  details { border-top: 1px dashed var(--rule); margin-top: 6px; }
+  summary {
+    cursor: pointer; list-style: none; padding: 10px 0 8px;
+    font-size: 12px; color: var(--ink-3); user-select: none;
+  }
+  summary:hover { color: var(--accent); }
+  summary::before { content: "▸ "; }
+  details[open] summary::before { content: "▾ "; }
+  .tests { margin: 0 0 10px; padding: 0; list-style: none; font-size: 12px; }
+  .tests li {
+    display: flex; justify-content: space-between; gap: 12px;
+    padding: 3px 0; border-bottom: 1px solid color-mix(in oklab, var(--rule) 45%, transparent);
+  }
+  .tests li span:first-child { color: var(--ink-2); overflow-wrap: anywhere; }
+
+  .state { padding: 40px 0; color: var(--ink-2); font-size: 14px; }
+
+  footer {
+    margin-top: 48px; border-top: 3px double var(--rule); padding-top: 18px;
+    font-size: 12.5px; color: var(--ink-2);
+  }
+  footer a { color: var(--accent); }
+  footer .rule-note { margin-top: 10px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <h1>netnl<span class="tld">·live</span></h1>
+    <span class="tagline">daily Internet.nl standards measurements of a real fleet</span>
+  </header>
+
+  <div class="meta" id="meta" hidden>
+    <span><span class="live-dot"></span>measured <b id="m-time">—</b></span>
+    <span>endpoint <b id="m-endpoint">—</b></span>
+    <span>request <b id="m-request">—</b></span>
+    <span>api <b id="m-api">—</b></span>
+  </div>
+
+  <p class="intro">
+    Every day a GitHub Action runs the <em>unmodified</em>
+    <a href="https://github.com/MWest2020/internetnl-cli">internetnl CLI</a>
+    against <b>api.westerweel.work</b> — a self-hosted
+    <a href="https://internet.nl">Internet.nl</a> batch instance behind the
+    multi-tenant <b>netnl</b> facade — and commits the CLI’s own
+    <code>--json</code> output here. What you see below is that file, rendered.
+  </p>
+
+  <div class="cards" id="cards"></div>
+  <div class="state" id="state">Loading latest measurement…</div>
+
+  <footer>
+    <div>
+      Made by <a href="https://github.com/MWest2020/internetnl-cli-demo/blob/main/.github/workflows/measure.yml">this workflow</a>
+      · data: <a href="data/latest.json">latest.json</a>
+      · how it works: <a href="https://claude.ai/code/artifact/82279ff8-2a68-43ee-a7b5-2d8fa0ebfa12">illustrated walk-through</a>
+      · standards &amp; scoring: <a href="https://internet.nl">internet.nl</a>
+    </div>
+    <div class="rule-note">
+      The measured set is fixed and operator-owned. Only measure hosts you
+      operate or have explicit permission to test.
+    </div>
+  </footer>
+</div>
+
+<script>
+  const STATUS_LABELS = [
+    ["passed",     "✓ passed",  "st-passed"],
+    ["failed",     "✗ failed",  "st-failed"],
+    ["warning",    "⚠ warning", "st-warning"],
+    ["info",       "ℹ info",    "st-other"],
+    ["error",      "⨯ error",   "st-failed"],
+    ["not_tested", "– not tested", "st-other"],
+  ];
+  const STATUS_MARK = { passed: "✓", failed: "✗", warning: "⚠", info: "ℹ", error: "⨯", not_tested: "–" };
+  const CATEGORY_NAMES = {
+    web_ipv6: "IPv6", web_dnssec: "DNSSEC", web_https: "HTTPS",
+    web_appsecpriv: "Security options", web_rpki: "RPKI",
+    mail_ipv6: "IPv6", mail_dnssec: "DNSSEC", mail_auth: "Authenticity (SPF/DKIM/DMARC)",
+    mail_starttls: "STARTTLS", mail_rpki: "RPKI",
+  };
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+  function card(host, dom) {
+    const el = document.createElement("article");
+    el.className = "card";
+    const safeHost = esc(host);
+    if (dom.status !== "ok") {
+      el.innerHTML = `<h2>${safeHost}</h2>
+        <p class="domain-error">⨯ measurement ${esc(dom.status || "unknown")} — no result for this run</p>`;
+      return el;
+    }
+    const pct = (dom.scoring || {}).percentage;
+    const tests = (dom.results || {}).tests || {};
+    const counts = {};
+    for (const t of Object.values(tests)) counts[t.status] = (counts[t.status] || 0) + 1;
+
+    const cats = (dom.results || {}).categories || {};
+    const catRows = Object.entries(cats)
+      .map(([k, c]) => {
+        const cls = ["passed","failed","warning"].includes(c.status) ? `st-${c.status}` : "st-other";
+        return `<li><span>${esc(CATEGORY_NAMES[k] || k)}</span><span class="st ${cls}">${STATUS_MARK[c.status] || "·"} ${esc(c.verdict || c.status)}</span></li>`;
+      })
+      .join("");
+
+    const chips = STATUS_LABELS
+      .filter(([k]) => counts[k])
+      .map(([k, label, cls]) => `<span class="st ${cls}"><span class="n">${counts[k]}</span> ${label}</span>`)
+      .join("");
+
+    const rows = Object.entries(tests)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([name, t]) =>
+        `<li><span>${esc(name)}</span><span class="st st-${["passed","failed","warning"].includes(t.status) ? t.status : "other"}">${STATUS_MARK[t.status] || "·"} ${esc(t.status)}</span></li>`)
+      .join("");
+
+    el.innerHTML = `
+      <h2>${safeHost}</h2>
+      <div class="score">${pct != null ? esc(pct) : "—"}<span class="pct">%</span></div>
+      <div class="scorebar"><i style="width:${Math.max(0, Math.min(100, pct ?? 0))}%"></i></div>
+      <ul class="cats">${catRows}</ul>
+      <div class="statuses">${chips}</div>
+      <details><summary>${Object.keys(tests).length} individual tests</summary><ul class="tests">${rows}</ul></details>`;
+    return el;
+  }
+
+  fetch("data/latest.json", { cache: "no-store" })
+    .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then((doc) => {
+      document.getElementById("m-time").textContent =
+        (doc.timestamp || "—").replace(/\.\d+(\+00:00|Z)$/, "Z").replace("+00:00", "Z");
+      document.getElementById("m-endpoint").textContent = doc.endpoint || "—";
+      document.getElementById("m-request").textContent = (doc.request_id || "").slice(0, 12) || "—";
+      document.getElementById("m-api").textContent = doc.api_version || "—";
+      document.getElementById("meta").hidden = false;
+      const cards = document.getElementById("cards");
+      const domains = doc.domains || {};
+      for (const host of Object.keys(domains).sort()) cards.appendChild(card(host, domains[host]));
+      document.getElementById("state").hidden = true;
+      if (!Object.keys(domains).length) {
+        document.getElementById("state").hidden = false;
+        document.getElementById("state").textContent = "The latest run contains no domain results.";
+      }
+    })
+    .catch((e) => {
+      document.getElementById("state").textContent =
+        "No measurement data yet (" + e.message + "). The daily workflow will publish the first run.";
+    });
+</script>
+</body>
+</html>
