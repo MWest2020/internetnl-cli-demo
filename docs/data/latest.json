@@ -1,24 +1,24 @@
 {
   "endpoint": "api.westerweel.work",
-  "timestamp": "2026-08-31T18:59:47.839436+00:00",
+  "timestamp": "2026-09-02T14:51:50.337180+00:00",
   "api_version": "2.7.0",
-  "request_id": "87c651e77f19caf16d5f2c25fcb77de9",
+  "request_id": "aebbf0ad3e2d826a31877dcadfafeae2",
   "request": {
-    "name": "demo-showcase-seed",
-    "submit_date": "2026-08-31T18:58:17.848371+00:00",
-    "finished_date": "2026-08-31T18:59:47.839436+00:00",
+    "name": "demo-showcase 2026-09-02",
+    "submit_date": "2026-09-02T14:50:20.586863+00:00",
+    "finished_date": "2026-09-02T14:51:50.337180+00:00",
     "request_type": "web",
     "status": "done",
-    "request_id": "87c651e77f19caf16d5f2c25fcb77de9"
+    "request_id": "aebbf0ad3e2d826a31877dcadfafeae2"
   },
   "domains": {
     "api.westerweel.work": {
       "status": "ok",
       "report": {
-        "url": "https://netnl.westerweel.work/site/api.westerweel.work/3/"
+        "url": "https://netnl.westerweel.work/site/api.westerweel.work/6/"
       },
       "scoring": {
-        "percentage": 71
+        "percentage": 96
       },
       "results": {
         "categories": {
@@ -27,16 +27,16 @@
             "status": "passed"
           },
           "web_dnssec": {
-            "verdict": "failed",
-            "status": "failed"
+            "verdict": "passed",
+            "status": "passed"
           },
           "web_https": {
             "verdict": "failed",
             "status": "failed"
           },
           "web_appsecpriv": {
-            "verdict": "warning",
-            "status": "warning"
+            "verdict": "passed",
+            "status": "passed"
           },
           "web_rpki": {
             "verdict": "passed",
@@ -65,24 +65,24 @@
             "verdict": "notice-status-code"
           },
           "web_dnssec_exist": {
-            "status": "failed",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_dnssec_valid": {
-            "status": "not_tested",
-            "verdict": "not-tested"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_https_http_available": {
             "status": "passed",
             "verdict": "good"
           },
           "web_https_http_redirect": {
-            "status": "failed",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_https_http_hsts": {
-            "status": "failed",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_https_http_compress": {
             "status": "passed",
@@ -101,8 +101,8 @@
             "verdict": "good"
           },
           "web_https_tls_version": {
-            "status": "failed",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_https_tls_compress": {
             "status": "passed",
@@ -133,8 +133,8 @@
             "verdict": "good"
           },
           "web_https_tls_caa": {
-            "status": "warning",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_https_dane_exist": {
             "status": "info",
@@ -161,24 +161,24 @@
             "verdict": "good"
           },
           "web_appsecpriv_x_frame_options": {
-            "status": "info",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_appsecpriv_referrer_policy": {
-            "status": "info",
-            "verdict": "recommendations"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_appsecpriv_csp": {
-            "status": "warning",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_appsecpriv_x_content_type_options": {
-            "status": "warning",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_appsecpriv_securitytxt": {
-            "status": "warning",
-            "verdict": "bad"
+            "status": "info",
+            "verdict": "recommendations"
           },
           "web_rpki_exists": {
             "status": "passed",
@@ -205,10 +205,10 @@
     "westerweel.work": {
       "status": "ok",
       "report": {
-        "url": "https://netnl.westerweel.work/site/westerweel.work/4/"
+        "url": "https://netnl.westerweel.work/site/westerweel.work/7/"
       },
       "scoring": {
-        "percentage": 73
+        "percentage": 95
       },
       "results": {
         "categories": {
@@ -217,8 +217,8 @@
             "status": "passed"
           },
           "web_dnssec": {
-            "verdict": "failed",
-            "status": "failed"
+            "verdict": "passed",
+            "status": "passed"
           },
           "web_https": {
             "verdict": "failed",
@@ -255,12 +255,12 @@
             "verdict": "good"
           },
           "web_dnssec_exist": {
-            "status": "failed",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_dnssec_valid": {
-            "status": "not_tested",
-            "verdict": "not-tested"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_https_http_available": {
             "status": "passed",
@@ -271,8 +271,8 @@
             "verdict": "good"
           },
           "web_https_http_hsts": {
-            "status": "failed",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_https_http_compress": {
             "status": "info",
@@ -323,8 +323,8 @@
             "verdict": "good"
           },
           "web_https_tls_caa": {
-            "status": "warning",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_https_dane_exist": {
             "status": "info",
@@ -367,8 +367,8 @@
             "verdict": "good"
           },
           "web_appsecpriv_securitytxt": {
-            "status": "warning",
-            "verdict": "bad"
+            "status": "info",
+            "verdict": "recommendations"
           },
           "web_rpki_exists": {
             "status": "passed",
@@ -395,10 +395,10 @@
     "netnl.westerweel.work": {
       "status": "ok",
       "report": {
-        "url": "https://netnl.westerweel.work/site/netnl.westerweel.work/5/"
+        "url": "https://netnl.westerweel.work/site/netnl.westerweel.work/8/"
       },
       "scoring": {
-        "percentage": 52
+        "percentage": 72
       },
       "results": {
         "categories": {
@@ -407,8 +407,8 @@
             "status": "failed"
           },
           "web_dnssec": {
-            "verdict": "failed",
-            "status": "failed"
+            "verdict": "passed",
+            "status": "passed"
           },
           "web_https": {
             "verdict": "unreachable",
@@ -445,12 +445,12 @@
             "verdict": "bad"
           },
           "web_dnssec_exist": {
-            "status": "failed",
-            "verdict": "bad"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_dnssec_valid": {
-            "status": "not_tested",
-            "verdict": "not-tested"
+            "status": "passed",
+            "verdict": "good"
           },
           "web_https_http_available": {
             "status": "error",
@@ -583,5 +583,34 @@
       }
     }
   },
-  "checks": null
+  "checks": {
+    "failed": [
+      {
+        "host": "api.westerweel.work",
+        "test": "web_https_tls_ciphers"
+      },
+      {
+        "host": "api.westerweel.work",
+        "test": "web_https_tls_keyexchangehash"
+      },
+      {
+        "host": "westerweel.work",
+        "test": "web_https_tls_cipherorder"
+      },
+      {
+        "host": "westerweel.work",
+        "test": "web_https_tls_ciphers"
+      },
+      {
+        "host": "westerweel.work",
+        "test": "web_https_tls_keyexchangehash"
+      },
+      {
+        "host": "netnl.westerweel.work",
+        "test": "web_ipv6_ws_similar"
+      }
+    ],
+    "accepted": [],
+    "unknown": []
+  }
 }
