@@ -174,6 +174,14 @@
   }
   .domain-input input:focus { outline: 2px solid var(--accent); border-color: transparent; }
   .domain-input label { font-size: 13px; color: var(--ink-2); }
+  #live-run {
+    cursor: pointer; font: 600 14px "IBM Plex Mono", monospace;
+    color: var(--paper); background: var(--accent);
+    border: none; border-radius: 5px; padding: 11px 16px;
+  }
+  #live-run:disabled { opacity: .55; cursor: wait; }
+  #live-block .state { padding: 12px 0; }
+  #live-block .cards { margin-top: 4px; }
   pre.cmds {
     background: var(--panel); border: 1px solid var(--rule); border-radius: 6px;
     padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.7; margin: 0;
@@ -227,6 +235,18 @@
     <div class="domain-input">
       <label for="dom" data-i18n="dom-label">your domain:</label>
       <input id="dom" type="text" placeholder="example.nl" autocomplete="off" spellcheck="false">
+      <button id="live-run" hidden data-i18n="live-btn">▶ Measure it live</button>
+    </div>
+    <div id="live-block" hidden>
+      <p class="sub" data-i18n="live-fairuse">
+        Live measurements share one public budget (a few runs per hour, max 2
+        per visitor) and run on our own instance. Only measure a domain you
+        operate or have permission to test. The result expires after 24
+        hours. Batch results can differ slightly from internet.nl's website
+        test.
+      </p>
+      <div class="state" id="live-state" hidden></div>
+      <div class="cards" id="live-cards"></div>
     </div>
     <h3 class="ex-h" data-i18n="exh-term">On your terminal</h3>
     <pre class="cmds"><span class="c"># 1. install the CLI (Python, via uv)</span>
@@ -482,6 +502,18 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
     "state-loading": "Laatste meting laden…",
     "state-nodata": "Nog geen meetdata ({err}). De dagelijkse workflow publiceert de eerste run.",
     "state-empty": "De laatste run bevat geen domeinresultaten.",
+    "live-btn": "\u25b6 Meet 'm live",
+    "live-fairuse": `Live metingen delen \u00e9\u00e9n publiek budget (een paar runs per
+    uur, max 2 per bezoeker) en draaien op onze eigen instance. Meet alleen
+    een domein dat je beheert of mag testen. Het resultaat verloopt na 24
+    uur. Batchresultaten kunnen iets afwijken van internet.nl's websitetest.`,
+    "live-invalid": "Voer een kaal domein in, zoals voorbeeld.nl (geen URL).",
+    "live-running": "Meting loopt \u2014 dit duurt 1 \u00e0 5 minuten\u2026",
+    "live-timeout": "De meting duurt langer dan verwacht; probeer het later of via de CLI.",
+    "live-err-429": "Het gedeelde demo-budget is even op \u2014 probeer het later nog eens.",
+    "live-err-502": "De meetinstance is nu niet bereikbaar.",
+    "live-err-503": "De live demo staat tijdelijk uit.",
+    "live-err-gen": "Er ging iets mis: ",
   };
   const EN_SNAPSHOT = {};
   for (const el of document.querySelectorAll("[data-i18n]"))
@@ -489,6 +521,13 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
   EN_SNAPSHOT["state-loading"] = "Loading latest measurement…";
   EN_SNAPSHOT["state-nodata"] = "No measurement data yet ({err}). The daily workflow will publish the first run.";
   EN_SNAPSHOT["state-empty"] = "The latest run contains no domain results.";
+  EN_SNAPSHOT["live-invalid"] = "Enter a bare domain like example.nl, not a URL.";
+  EN_SNAPSHOT["live-running"] = "Measurement running \u2014 takes 1\u20135 minutes\u2026";
+  EN_SNAPSHOT["live-timeout"] = "This measurement is taking longer than expected; try again later or use the CLI.";
+  EN_SNAPSHOT["live-err-429"] = "The shared demo budget is used up for now \u2014 try again later.";
+  EN_SNAPSHOT["live-err-502"] = "The measurement instance is unreachable right now.";
+  EN_SNAPSHOT["live-err-503"] = "The live demo is temporarily off.";
+  EN_SNAPSHOT["live-err-gen"] = "Something went wrong: ";
 
   let lang = "en";
   try { lang = localStorage.getItem("lang") || "nl"; } catch (e) {}
@@ -523,6 +562,94 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
     const ok = /^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/.test(v);
     for (const el of document.querySelectorAll(".cmd-domain"))
       el.textContent = ok ? v : "example.nl";
+  });
+
+  // --- Live demo run -------------------------------------------------------
+  // Dark-launched: the button only appears when the facade's demo endpoints
+  // exist (probe: GET on an impossible id \u2192 404 = enabled, 501 = disabled).
+  // Contract: docs/reference/demo-api.md in the internetnl-cli repo.
+  const DEMO_BASE = "https://api.westerweel.work/demo/requests";
+  const liveBtn = document.getElementById("live-run");
+  const liveBlock = document.getElementById("live-block");
+  const liveState = document.getElementById("live-state");
+  const liveCards = document.getElementById("live-cards");
+  let liveLast = null; // {key, extra} zodat de taaltoggle live-teksten mee vertaalt
+  function liveMsg(key, extra) {
+    liveLast = { key, extra };
+    liveState.hidden = false;
+    liveState.textContent = t(key) + (extra || "");
+  }
+  const _applyLangOrig = applyLang;
+  applyLang = function () {
+    _applyLangOrig();
+    if (liveLast && !liveState.hidden) liveState.textContent = t(liveLast.key) + (liveLast.extra || "");
+  };
+  document.getElementById("lang-toggle").addEventListener("click", () => {
+    if (liveLast && !liveState.hidden) liveState.textContent = t(liveLast.key) + (liveLast.extra || "");
+  });
+
+  fetch(DEMO_BASE + "/00000000000000000000000000000000", { cache: "no-store" })
+    .then((r) => {
+      if (r.status === 404) { liveBtn.hidden = false; liveBlock.hidden = false; liveState.hidden = true; }
+    })
+    .catch(() => {});
+
+  function errKey(status) {
+    if (status === 429) return "live-err-429";
+    if (status === 503) return "live-err-503";
+    if (status >= 500) return "live-err-502";
+    return "live-err-gen";
+  }
+  async function pollDemo(id, started) {
+    const elapsed = (Date.now() - started) / 1000;
+    if (elapsed > 600) { liveBtn.disabled = false; return liveMsg("live-timeout"); }
+    let r;
+    try { r = await fetch(DEMO_BASE + "/" + id, { cache: "no-store" }); }
+    catch (e) { liveBtn.disabled = false; return liveMsg("live-err-502"); }
+    if (!r.ok) { liveBtn.disabled = false; return liveMsg(errKey(r.status)); }
+    const doc = await r.json();
+    const st = (doc.request || {}).status;
+    if (st === "done") {
+      const res = await fetch(DEMO_BASE + "/" + id + "/results", { cache: "no-store" });
+      liveBtn.disabled = false;
+      if (!res.ok) return liveMsg(errKey(res.status));
+      const rdoc = await res.json();
+      liveState.hidden = true; liveLast = null;
+      liveCards.replaceChildren();
+      const domains = rdoc.domains || {};
+      for (const host of Object.keys(domains)) liveCards.appendChild(card(host, domains[host]));
+      return;
+    }
+    if (st === "error" || st === "cancelled") {
+      liveBtn.disabled = false;
+      return liveMsg("live-err-gen", st);
+    }
+    liveMsg("live-running", "(" + (st || "\u2026") + ")");
+    setTimeout(() => pollDemo(id, started), elapsed < 60 ? 5000 : 15000);
+  }
+  liveBtn.addEventListener("click", async () => {
+    const v = document.getElementById("dom").value.trim().toLowerCase()
+      .replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    if (!/^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/.test(v)) return liveMsg("live-invalid");
+    liveBtn.disabled = true;
+    liveCards.replaceChildren();
+    liveMsg("live-running", "");
+    let r;
+    try {
+      r = await fetch(DEMO_BASE, {
+        method: "POST", credentials: "omit",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ domain: v }),
+      });
+    } catch (e) { liveBtn.disabled = false; return liveMsg("live-err-502"); }
+    if (!r.ok) {
+      liveBtn.disabled = false;
+      let msg = "";
+      try { msg = ((await r.json()).error || {}).msg || ""; } catch (e) {}
+      return liveMsg(errKey(r.status), r.status === 400 && msg ? msg : "");
+    }
+    const doc = await r.json();
+    pollDemo((doc.request || {}).request_id, Date.now());
   });
 
   // Mail measurement (separate daily run, --type mail) — section stays
