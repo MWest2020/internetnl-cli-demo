@@ -51,15 +51,20 @@ jobs:
             --type web --name "demo-showcase $(date -u +%F)" --json \
             > docs/data/latest.json
 
-      - name: Measure mail (the domain that actually receives mail)
-        env:
-          INTERNETNL_ENDPOINT: https://api.westerweel.work
-          INTERNETNL_USERNAME: ${{ secrets.INTERNETNL_USERNAME }}
-          INTERNETNL_PASSWORD: ${{ secrets.INTERNETNL_PASSWORD }}
-        run: |
-          internetnl submit westerweel.work \
-            --type mail --name "demo-showcase mail $(date -u +%F)" --json \
-            > docs/data/latest-mail.json
+      # UITGESCHAKELD (2026-09-03): Hetzner blokkeert uitgaande poort 25 op
+      # de meet-VPS, waardoor mail_starttls en mail_ipv6_mx_reach falen op
+      # ONZE infrastructuur i.p.v. op het gemeten domein — dat verdict is
+      # dus onwaar en publiceren we niet. Heractiveren zodra de port-25-
+      # unblock bij Hetzner is toegekend (Cloud Console -> Limits).
+      # - name: Measure mail (the domain that actually receives mail)
+      #   env:
+      #     INTERNETNL_ENDPOINT: https://api.westerweel.work
+      #     INTERNETNL_USERNAME: ${{ secrets.INTERNETNL_USERNAME }}
+      #     INTERNETNL_PASSWORD: ${{ secrets.INTERNETNL_PASSWORD }}
+      #   run: |
+      #     internetnl submit westerweel.work \
+      #       --type mail --name "demo-showcase mail $(date -u +%F)" --json \
+      #       > docs/data/latest-mail.json
 
       - name: Append score summary to history
         run: |
