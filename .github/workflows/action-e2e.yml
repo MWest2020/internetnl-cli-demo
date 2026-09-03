@@ -1,0 +1,65 @@
+# End-to-end proof of the CI story the demo page advertises: the exact
+# `uses: MWest2020/internetnl-cli@main` snippet, run for real against
+# api.westerweel.work with a real credential and a real measurement.
+#
+# Two jobs, two claims:
+#   report-only  — fail-on-scored=false: the action succeeds and leaves a
+#                  results JSON (the "measure and report" mode).
+#   gate         — fail-on-scored=true (the default the page shows): our own
+#                  host currently fails scored TLS-cipher subtests, so the
+#                  action MUST exit 3 and the step MUST fail. The job then
+#                  asserts that failure — proving "exit 3 when a scored
+#                  subtest fails, so the pipeline goes red" is literally true.
+#
+# Manual trigger only: it performs two real measurements (rate-limited
+# tenant), so it is evidence, not a schedule.
+name: action-e2e
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  report-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - id: run
+        uses: MWest2020/internetnl-cli@main
+        with:
+          hosts: westerweel.work
+          fail-on-scored: "false"
+          name: action-e2e report-only
+          endpoint: https://api.westerweel.work
+          username: ${{ secrets.INTERNETNL_USERNAME }}
+          password: ${{ secrets.INTERNETNL_PASSWORD }}
+      - name: Results file exists and is valid JSON
+        run: |
+          test -s "${{ steps.run.outputs.results-path }}"
+          python3 -c "import json,sys; d=json.load(open(sys.argv[1])); print('score:', d['domains']['westerweel.work']['scoring']['percentage'])" "${{ steps.run.outputs.results-path }}"
+
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - id: run
+        continue-on-error: true
+        uses: MWest2020/internetnl-cli@main
+        with:
+          hosts: westerweel.work
+          fail-on-scored: "true"
+          name: action-e2e gate
+          endpoint: https://api.westerweel.work
+          username: ${{ secrets.INTERNETNL_USERNAME }}
+          password: ${{ secrets.INTERNETNL_PASSWORD }}
+      - name: The gate must have tripped (scored subtests fail on this host)
+        if: steps.run.outcome != 'failure'
+        run: |
+          echo "::error::expected the gate to trip (exit 3) — it did not"
+          exit 1
+      - name: Results JSON still delivered when the gate trips
+        run: |
+          test -s "${{ steps.run.outputs.results-path }}"
+          echo "gate tripped AND results present — claim proven"

@@ -39,7 +39,7 @@ jobs:
       - name: Install the CLI (from main, unmodified)
         run: uv tool install git+https://github.com/MWest2020/internetnl-cli
 
-      - name: Measure (submit + poll to completion)
+      - name: Measure web (submit + poll to completion)
         env:
           INTERNETNL_ENDPOINT: https://api.westerweel.work
           INTERNETNL_USERNAME: ${{ secrets.INTERNETNL_USERNAME }}
@@ -50,6 +50,16 @@ jobs:
             westerweel.work api.westerweel.work netnl.westerweel.work \
             --type web --name "demo-showcase $(date -u +%F)" --json \
             > docs/data/latest.json
+
+      - name: Measure mail (the domain that actually receives mail)
+        env:
+          INTERNETNL_ENDPOINT: https://api.westerweel.work
+          INTERNETNL_USERNAME: ${{ secrets.INTERNETNL_USERNAME }}
+          INTERNETNL_PASSWORD: ${{ secrets.INTERNETNL_PASSWORD }}
+        run: |
+          internetnl submit westerweel.work \
+            --type mail --name "demo-showcase mail $(date -u +%F)" --json \
+            > docs/data/latest-mail.json
 
       - name: Append score summary to history
         run: |
