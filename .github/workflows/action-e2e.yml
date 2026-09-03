@@ -33,8 +33,7 @@ jobs:
           fail-on-scored: "false"
           name: action-e2e report-only
           endpoint: https://api.westerweel.work
-          username: ${{ secrets.INTERNETNL_USERNAME }}
-          password: ${{ secrets.INTERNETNL_PASSWORD }}
+          credential: ${{ secrets.INTERNETNL_CREDENTIAL }}
       - name: Results file exists and is valid JSON
         run: |
           test -s "${{ steps.run.outputs.results-path }}"
@@ -52,8 +51,7 @@ jobs:
           fail-on-scored: "true"
           name: action-e2e gate
           endpoint: https://api.westerweel.work
-          username: ${{ secrets.INTERNETNL_USERNAME }}
-          password: ${{ secrets.INTERNETNL_PASSWORD }}
+          credential: ${{ secrets.INTERNETNL_CREDENTIAL }}
       - name: The gate must have tripped (scored subtests fail on this host)
         if: steps.run.outcome != 'failure'
         run: |

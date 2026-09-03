@@ -42,8 +42,7 @@ jobs:
       - name: Measure web (submit + poll to completion)
         env:
           INTERNETNL_ENDPOINT: https://api.westerweel.work
-          INTERNETNL_USERNAME: ${{ secrets.INTERNETNL_USERNAME }}
-          INTERNETNL_PASSWORD: ${{ secrets.INTERNETNL_PASSWORD }}
+          INTERNETNL_CREDENTIAL: ${{ secrets.INTERNETNL_CREDENTIAL }}
         run: |
           mkdir -p docs/data
           internetnl submit \
