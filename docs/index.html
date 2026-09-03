@@ -299,6 +299,14 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
 
     <h3 class="ex-h" id="mail-h" hidden data-i18n="mail-h">Mail (yes, internet.nl tests email too — so do we)</h3>
     <div class="cards" id="mail-cards"></div>
+    <p class="footnote" id="mail-note" data-i18n="mail-note">
+      <b>Mail measurements are coming.</b> internet.nl tests email standards
+      too (SPF, DKIM, DMARC, STARTTLS, DNSSEC) and so does our instance —
+      but our measurement VPS is still waiting for its outbound SMTP unblock
+      at the hosting provider (new-account limit). Rather than publish a
+      verdict our own infrastructure distorts, we wait. Web scores are
+      unaffected.
+    </p>
 
     <p class="footnote" data-i18n="footnote">
       <b>Why not 100%?</b> The remaining points on the two public hosts are
@@ -452,6 +460,12 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
     "r2-ask": "of vraag het gewoon →",
     "fleet-h2": "Onze eigen vloot, dagelijks gemeten",
     "mail-h": "Mail (ja, internet.nl test ook e-mail — wij dus ook)",
+    "mail-note": `<b>Mailmetingen komen eraan.</b> internet.nl test ook
+    e-mailstandaarden (SPF, DKIM, DMARC, STARTTLS, DNSSEC) en onze instance
+    ook — maar onze meet-VPS wacht nog op de uitgaande-SMTP-vrijgave bij de
+    hostingprovider (nieuw-account-limiet). Liever wachten dan een verdict
+    publiceren dat door onze eigen infrastructuur vertekend is. De
+    webscores staan hier los van.`,
     "footnote": `<b>Waarom geen 100%?</b> De resterende punten op de twee
     publieke hosts zijn Cloudflare edge-TLS-ciphertests (alleen te fixen met
     een betaalde Cloudflare-add-on — een bewuste afweging voor nu), en
@@ -519,7 +533,10 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
       const cards = document.getElementById("mail-cards");
       const domains = doc.domains || {};
       for (const host of Object.keys(domains).sort()) cards.appendChild(card(host, domains[host]));
-      if (Object.keys(domains).length) document.getElementById("mail-h").hidden = false;
+      if (Object.keys(domains).length) {
+        document.getElementById("mail-h").hidden = false;
+        document.getElementById("mail-note").hidden = true;
+      }
     })
     .catch(() => {});
 </script>
