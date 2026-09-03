@@ -477,7 +477,7 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
   EN_SNAPSHOT["state-empty"] = "The latest run contains no domain results.";
 
   let lang = "en";
-  try { lang = localStorage.getItem("lang") || (navigator.language.startsWith("nl") ? "nl" : "en"); } catch (e) {}
+  try { lang = localStorage.getItem("lang") || "nl"; } catch (e) {}
   let stateKey = "state-loading", stateErr = "";
   const t = (k) => (lang === "nl" ? NL[k] : EN_SNAPSHOT[k]) ?? EN_SNAPSHOT[k] ?? "";
   function renderState() {
