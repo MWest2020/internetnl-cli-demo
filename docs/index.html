@@ -66,6 +66,13 @@
   }
   .masthead h1 .tld { color: var(--accent); }
   .masthead .tagline { color: var(--ink-2); font-size: 13px; }
+  #lang-toggle {
+    margin-left: auto; cursor: pointer;
+    font: 600 12px "IBM Plex Mono", monospace;
+    color: var(--accent); background: none;
+    border: 1px solid var(--rule); border-radius: 4px; padding: 5px 10px;
+  }
+  #lang-toggle:hover { border-color: var(--accent); }
 
   .meta {
     display: flex; flex-wrap: wrap; gap: 4px 28px;
@@ -200,10 +207,11 @@
 <div class="wrap">
   <header class="masthead">
     <h1>netnl<span class="tld">·live</span></h1>
-    <span class="tagline">daily Internet.nl standards measurements of a real fleet</span>
+    <span class="tagline" data-i18n="tagline">daily Internet.nl standards measurements of a real fleet</span>
+    <button id="lang-toggle" aria-label="switch language">NL</button>
   </header>
 
-  <p class="intro">
+  <p class="intro" data-i18n="intro">
     Every day a GitHub Action runs the <em>unmodified</em>
     <a href="https://github.com/MWest2020/internetnl-cli">internetnl CLI</a>
     against <b>api.westerweel.work</b> — a self-hosted
@@ -213,14 +221,14 @@
   </p>
 
   <section class="tryit">
-    <h2>Try it with your own domain</h2>
-    <p class="sub">Type a domain you operate — this only rewrites the examples
+    <h2 data-i18n="tryit-h2">Try it with your own domain</h2>
+    <p class="sub" data-i18n="tryit-sub">Type a domain you operate — this only rewrites the examples
     below, nothing is measured from this page.</p>
     <div class="domain-input">
-      <label for="dom">your domain:</label>
+      <label for="dom" data-i18n="dom-label">your domain:</label>
       <input id="dom" type="text" placeholder="example.nl" autocomplete="off" spellcheck="false">
     </div>
-    <h3 class="ex-h">On your terminal</h3>
+    <h3 class="ex-h" data-i18n="exh-term">On your terminal</h3>
     <pre class="cmds"><span class="c"># 1. install the CLI (Python, via uv)</span>
 uv tool install git+https://github.com/MWest2020/internetnl-cli
 
@@ -232,8 +240,8 @@ export INTERNETNL_USERNAME=you INTERNETNL_PASSWORD=…
 internetnl submit <span class="v cmd-domain">example.nl</span>
 internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
 
-    <h3 class="ex-h">In your CI — the real target</h3>
-    <p class="sub">Three lines of YAML and every deploy gates on the same
+    <h3 class="ex-h" data-i18n="exh-ci">In your CI — the real target</h3>
+    <p class="sub" data-i18n="ci-sub">Three lines of YAML and every deploy gates on the same
     standards internet.nl measures: exit 3 when a scored subtest fails, so
     the pipeline goes red. <a href="https://github.com/MWest2020/internetnl-cli/blob/main/docs/how-to/ci.md">Full CI guide →</a></p>
     <pre class="cmds"><span class="c"># .github/workflows/standards.yml</span>
@@ -246,8 +254,8 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
   </section>
 
   <section class="how">
-    <h2>How this works</h2>
-    <p class="sub">
+    <h2 data-i18n="how-h2">How this works</h2>
+    <p class="sub" data-i18n="how-sub">
       The <a href="https://github.com/MWest2020/internetnl-cli">internetnl CLI</a>
       speaks the Internet.nl batch API. It measures a list of hosts and returns
       the verdicts — as a table for humans or JSON for CI. Behind
@@ -258,30 +266,30 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
     </p>
     <div class="routes">
       <div class="route">
-        <h3>Run your own</h3>
-        <p>Everything is open source: the CLI, the facade, and the deploy
+        <h3 data-i18n="r1-h3">Run your own</h3>
+        <p data-i18n="r1-p">Everything is open source: the CLI, the facade, and the deploy
         runbooks (Kubernetes or a single VPS). Own your measurements
         end-to-end, like this demo does.</p>
-        <a class="lnk" href="https://github.com/MWest2020/internetnl-cli#readme">Repo &amp; runbooks →</a>
+        <a class="lnk" href="https://github.com/MWest2020/internetnl-cli#readme" data-i18n="r1-lnk">Repo &amp; runbooks →</a>
       </div>
       <div class="route">
-        <h3>Ask for access</h3>
-        <p>Prefer not to host? A small donation gets you a <b>lifetime
+        <h3 data-i18n="r2-h3">Ask for access</h3>
+        <p data-i18n="r2-p">Prefer not to host? A small donation gets you a <b>lifetime
         credential</b> on our instance — an endpoint, a username and a
         password; the CLI (or the GitHub Action) does the rest. Leave your
         email in the donation message and your key arrives by mail.
         Best-effort beta, no SLA; fair use is enforced by per-tenant rate
         limits. Only measure hosts you operate or have permission to test.</p>
-        <a class="btn" href="https://buymeacoffee.com/mark.westerweel">☕ Buy a coffee, get a lifetime key</a>
-        &nbsp; <a class="lnk" href="mailto:mark&#64;conduction&#46;nl?subject=netnl%20beta%20access">or just ask →</a>
+        <a class="btn" href="https://buymeacoffee.com/mark.westerweel" data-i18n="r2-btn">☕ Buy a coffee, get a lifetime key</a>
+        &nbsp; <a class="lnk" href="mailto:mark&#64;conduction&#46;nl?subject=netnl%20beta%20access" data-i18n="r2-ask">or just ask →</a>
       </div>
     </div>
   </section>
 
   <section class="fleet">
-    <h2>Our own fleet, measured daily</h2>
+    <h2 data-i18n="fleet-h2">Our own fleet, measured daily</h2>
     <div class="meta" id="meta" hidden>
-      <span><span class="live-dot"></span>measured <b id="m-time">—</b></span>
+      <span><span class="live-dot"></span><span data-i18n="meta-measured">measured</span> <b id="m-time">—</b></span>
       <span>endpoint <b id="m-endpoint">—</b></span>
       <span>request <b id="m-request">—</b></span>
       <span>api <b id="m-api">—</b></span>
@@ -289,10 +297,10 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
     <div class="cards" id="cards"></div>
     <div class="state" id="state">Loading latest measurement…</div>
 
-    <h3 class="ex-h" id="mail-h" hidden>Mail (yes, internet.nl tests email too — so do we)</h3>
+    <h3 class="ex-h" id="mail-h" hidden data-i18n="mail-h">Mail (yes, internet.nl tests email too — so do we)</h3>
     <div class="cards" id="mail-cards"></div>
 
-    <p class="footnote">
+    <p class="footnote" data-i18n="footnote">
       <b>Why not 100%?</b> The remaining points on the two public hosts are
       Cloudflare edge-TLS cipher tests (fixable only with a paid Cloudflare
       add-on — a deliberate trade-off for now), and
@@ -303,13 +311,13 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
   </section>
 
   <footer>
-    <div>
+    <div data-i18n="footer-made">
       Made by <a href="https://github.com/MWest2020/internetnl-cli-demo/blob/main/.github/workflows/measure.yml">this workflow</a>
       · data: <a href="data/latest.json">latest.json</a>
       · how it works: <a href="https://claude.ai/code/artifact/82279ff8-2a68-43ee-a7b5-2d8fa0ebfa12">illustrated walk-through</a>
       · standards &amp; scoring: <a href="https://internet.nl">internet.nl</a>
     </div>
-    <div class="rule-note">
+    <div class="rule-note" data-i18n="footer-rule">
       The measured set is fixed and operator-owned. Only measure hosts you
       operate or have explicit permission to test.
     </div>
@@ -392,13 +400,106 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
       document.getElementById("state").hidden = true;
       if (!Object.keys(domains).length) {
         document.getElementById("state").hidden = false;
-        document.getElementById("state").textContent = "The latest run contains no domain results.";
+        setState("state-empty");
       }
     })
     .catch((e) => {
-      document.getElementById("state").textContent =
-        "No measurement data yet (" + e.message + "). The daily workflow will publish the first run.";
+      setState("state-nodata", e.message);
     });
+
+  // --- NL/EN toggle -------------------------------------------------------
+  // English lives in the HTML itself (single source); at load we snapshot it,
+  // Dutch comes from this dictionary. Choice persists in localStorage.
+  const NL = {
+    "tagline": "dagelijkse Internet.nl-metingen van een echte vloot",
+    "intro": `Elke dag draait een GitHub Action de <em>ongewijzigde</em>
+    <a href="https://github.com/MWest2020/internetnl-cli">internetnl CLI</a>
+    tegen <b>api.westerweel.work</b> — een zelf-gehoste
+    <a href="https://internet.nl">Internet.nl</a> batch-instance achter de
+    multi-tenant <b>netnl</b>-facade — en commit de
+    <code>--json</code>-uitvoer van de CLI hierheen. Wat je hieronder ziet is
+    dat bestand, gerenderd.`,
+    "tryit-h2": "Probeer het met je eigen domein",
+    "tryit-sub": `Typ een domein dat je beheert — dit herschrijft alleen de
+    voorbeelden hieronder, er wordt niets gemeten vanaf deze pagina.`,
+    "dom-label": "jouw domein:",
+    "exh-term": "Op je terminal",
+    "exh-ci": "In je CI — waar het echt om gaat",
+    "ci-sub": `Drie regels YAML en elke deploy toetst op dezelfde standaarden
+    die internet.nl meet: exit 3 als een gescoorde subtest faalt, dus de
+    pipeline gaat op rood. <a href="https://github.com/MWest2020/internetnl-cli/blob/main/docs/how-to/ci.md">Volledige CI-gids →</a>`,
+    "how-h2": "Hoe dit werkt",
+    "how-sub": `De <a href="https://github.com/MWest2020/internetnl-cli">internetnl CLI</a>
+    spreekt de Internet.nl batch-API. Hij meet een lijst hosts en geeft de
+    verdicts terug — als tabel voor mensen of JSON voor CI. Achter
+    <b>api.westerweel.work</b> zit <b>netnl</b>: een kleine multi-tenant
+    facade voor een zelf-gehoste Internet.nl batch-instance, zodat meerdere
+    teams kunnen meten zonder zelf een stack te draaien. Het hele plaatje in
+    de <a href="https://claude.ai/code/artifact/82279ff8-2a68-43ee-a7b5-2d8fa0ebfa12">geïllustreerde walk-through</a>.`,
+    "r1-h3": "Draai je eigen",
+    "r1-p": `Alles is open source: de CLI, de facade en de deploy-runbooks
+    (Kubernetes of een enkele VPS). Volledig eigenaar van je metingen,
+    zoals deze demo.`,
+    "r1-lnk": "Repo &amp; runbooks →",
+    "r2-h3": "Vraag toegang",
+    "r2-p": `Liever niet hosten? Een kleine donatie geeft je een <b>lifetime
+    credential</b> op onze instance — een endpoint, een gebruikersnaam en
+    een wachtwoord; de CLI (of de GitHub Action) doet de rest. Laat je
+    e-mail achter bij de donatie en je key komt per mail. Best-effort beta,
+    geen SLA; fair use via per-tenant rate-limits. Meet alleen hosts die je
+    beheert of waarvoor je toestemming hebt.`,
+    "r2-btn": "☕ Koop een koffie, krijg een lifetime key",
+    "r2-ask": "of vraag het gewoon →",
+    "fleet-h2": "Onze eigen vloot, dagelijks gemeten",
+    "mail-h": "Mail (ja, internet.nl test ook e-mail — wij dus ook)",
+    "footnote": `<b>Waarom geen 100%?</b> De resterende punten op de twee
+    publieke hosts zijn Cloudflare edge-TLS-ciphertests (alleen te fixen met
+    een betaalde Cloudflare-add-on — een bewuste afweging voor nu), en
+    <code>netnl.westerweel.work</code> weigert bewust publieke HTTPS: de
+    meetinstance is alleen via een privénetwerk bereikbaar. Een eerlijk
+    scorebord toont z'n eigen afwegingen.`,
+    "footer-made": `Gemaakt door <a href="https://github.com/MWest2020/internetnl-cli-demo/blob/main/.github/workflows/measure.yml">deze workflow</a>
+    · data: <a href="data/latest.json">latest.json</a>
+    · hoe het werkt: <a href="https://claude.ai/code/artifact/82279ff8-2a68-43ee-a7b5-2d8fa0ebfa12">geïllustreerde walk-through</a>
+    · standaarden &amp; scoring: <a href="https://internet.nl">internet.nl</a>`,
+    "footer-rule": `De gemeten set is vast en in eigen beheer. Meet alleen
+    hosts die je beheert of waarvoor je expliciete toestemming hebt.`,
+    "meta-measured": "gemeten",
+    "state-loading": "Laatste meting laden…",
+    "state-nodata": "Nog geen meetdata ({err}). De dagelijkse workflow publiceert de eerste run.",
+    "state-empty": "De laatste run bevat geen domeinresultaten.",
+  };
+  const EN_SNAPSHOT = {};
+  for (const el of document.querySelectorAll("[data-i18n]"))
+    EN_SNAPSHOT[el.getAttribute("data-i18n")] = el.innerHTML;
+  EN_SNAPSHOT["state-loading"] = "Loading latest measurement…";
+  EN_SNAPSHOT["state-nodata"] = "No measurement data yet ({err}). The daily workflow will publish the first run.";
+  EN_SNAPSHOT["state-empty"] = "The latest run contains no domain results.";
+
+  let lang = "en";
+  try { lang = localStorage.getItem("lang") || (navigator.language.startsWith("nl") ? "nl" : "en"); } catch (e) {}
+  let stateKey = "state-loading", stateErr = "";
+  const t = (k) => (lang === "nl" ? NL[k] : EN_SNAPSHOT[k]) ?? EN_SNAPSHOT[k] ?? "";
+  function renderState() {
+    const el = document.getElementById("state");
+    if (!el.hidden && stateKey) el.textContent = t(stateKey).replace("{err}", stateErr);
+  }
+  function setState(key, err) { stateKey = key; stateErr = err || ""; renderState(); }
+  function applyLang() {
+    for (const el of document.querySelectorAll("[data-i18n]")) {
+      const k = el.getAttribute("data-i18n");
+      el.innerHTML = lang === "nl" ? (NL[k] ?? EN_SNAPSHOT[k]) : EN_SNAPSHOT[k];
+    }
+    document.documentElement.lang = lang;
+    document.getElementById("lang-toggle").textContent = lang === "nl" ? "EN" : "NL";
+    renderState();
+  }
+  document.getElementById("lang-toggle").addEventListener("click", () => {
+    lang = lang === "nl" ? "en" : "nl";
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+    applyLang();
+  });
+  applyLang();
 
   // "Try it": rewrite the sample commands (terminal + CI) with the visitor's
   // own domain. Display-only — nothing is submitted anywhere from this page.
