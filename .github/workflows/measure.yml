@@ -1,3 +1,23 @@
+# UITGESCHAKELD (2026-09-06) — de meting draait nu op het eigen cluster.
+#
+# Waarom: GitHub voert `schedule` op gedeelde runners vertraagd uit en slaat
+# hem soms helemaal over. Gemeten: op 2026-09-06 draaide deze workflow niet,
+# en de twee runs ervoor landden op 09:06 en 09:41 in plaats van de
+# geconfigureerde 05:17. Voor een dagelijkse meting waarvan je de historie
+# wilt kunnen vertrouwen is dat te wankel.
+#
+# Vervanger: CronJob `netnl-measure` in namespace `netnl` op het homelab-
+# cluster (MWest2020/homelab, cluster-config/infra/netnl/measure-cronjob.yaml).
+# Die draait dezelfde ONGEWIJZIGDE CLI tegen hetzelfde publieke endpoint en
+# pusht hetzelfde resultaat naar docs/data/ via een deploy key op deze repo.
+#
+# Deze workflow staat op `disabled_manually` in de Actions-UI. Laat hem uit:
+# opnieuw inschakelen levert twee metingen per dag en twee commits op. Het
+# bestand blijft staan als leesbare beschrijving van wat er gebeurt, en als
+# terugvalpad mocht het cluster ooit wegvallen — dan moet ook het secret
+# INTERNETNL_CREDENTIAL weer kloppen, want de `showcase`-tenant is op
+# 2026-09-06 opnieuw uitgegeven.
+#
 # Daily live measurement for the showcase page (docs/index.html).
 #
 # Runs the UNMODIFIED internetnl CLI against the public netnl facade at
