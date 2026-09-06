@@ -1,6 +1,6 @@
 # internetnl-cli-demo
 
-A tiny, runnable demo of [**internetnl-cli**](https://github.com/MWest2020/internetnl-cli) —
+A tiny, runnable example of [**internetnl-cli**](https://github.com/MWest2020/internetnl-cli) —
 a command-line client for the [Internet.nl](https://internet.nl) batch API,
 and **netnl**, a multi-tenant facade in front of a self-hosted batch instance.
 

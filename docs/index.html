@@ -289,7 +289,7 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
         <h3 data-i18n="r1-h3">Run your own</h3>
         <p data-i18n="r1-p">Everything is open source: the CLI, the facade, and the deploy
         runbooks (Kubernetes or a single VPS). Own your measurements
-        end-to-end, like this demo does.</p>
+        end-to-end, like this page does.</p>
         <a class="lnk" href="https://github.com/MWest2020/internetnl-cli#readme" data-i18n="r1-lnk">Repo &amp; runbooks →</a>
       </div>
       <div class="route">
@@ -467,7 +467,7 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
     "r1-h3": "Draai je eigen",
     "r1-p": `Alles is open source: de CLI, de facade en de deploy-runbooks
     (Kubernetes of een enkele VPS). Volledig eigenaar van je metingen,
-    zoals deze demo.`,
+    zoals deze pagina.`,
     "r1-lnk": "Repo &amp; runbooks →",
     "r2-h3": "Vraag toegang",
     "r2-p": `Liever niet hosten? Een kleine donatie geeft je een <b>lifetime
@@ -510,9 +510,9 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
     "live-invalid": "Voer een kaal domein in, zoals voorbeeld.nl (geen URL).",
     "live-running": "Meting loopt \u2014 dit duurt 1 \u00e0 5 minuten\u2026",
     "live-timeout": "De meting duurt langer dan verwacht; probeer het later of via de CLI.",
-    "live-err-429": "Het gedeelde demo-budget is even op \u2014 probeer het later nog eens.",
+    "live-err-429": "Het gedeelde budget is even op \u2014 probeer het later nog eens.",
     "live-err-502": "De meetinstance is nu niet bereikbaar.",
-    "live-err-503": "De live demo staat tijdelijk uit.",
+    "live-err-503": "De dienst staat tijdelijk uit.",
     "live-err-gen": "Er ging iets mis: ",
   };
   const EN_SNAPSHOT = {};
@@ -524,9 +524,9 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
   EN_SNAPSHOT["live-invalid"] = "Enter a bare domain like example.nl, not a URL.";
   EN_SNAPSHOT["live-running"] = "Measurement running \u2014 takes 1\u20135 minutes\u2026";
   EN_SNAPSHOT["live-timeout"] = "This measurement is taking longer than expected; try again later or use the CLI.";
-  EN_SNAPSHOT["live-err-429"] = "The shared demo budget is used up for now \u2014 try again later.";
+  EN_SNAPSHOT["live-err-429"] = "The shared budget is used up for now \u2014 try again later.";
   EN_SNAPSHOT["live-err-502"] = "The measurement instance is unreachable right now.";
-  EN_SNAPSHOT["live-err-503"] = "The live demo is temporarily off.";
+  EN_SNAPSHOT["live-err-503"] = "The service is temporarily off.";
   EN_SNAPSHOT["live-err-gen"] = "Something went wrong: ";
 
   let lang = "en";
@@ -564,8 +564,8 @@ internetnl submit --type mail <span class="v cmd-domain">example.nl</span></pre>
       el.textContent = ok ? v : "example.nl";
   });
 
-  // --- Live demo run -------------------------------------------------------
-  // Dark-launched: the button only appears when the facade's demo endpoints
+  // --- Live run ------------------------------------------------------------
+  // Dark-launched: the button only appears when the facade's anonymous endpoints
   // exist (probe: GET on an impossible id \u2192 404 = enabled, 501 = disabled).
   // Contract: docs/reference/demo-api.md in the internetnl-cli repo.
   const DEMO_BASE = "https://api.westerweel.work/demo/requests";
