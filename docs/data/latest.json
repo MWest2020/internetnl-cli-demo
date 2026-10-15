@@ -1,21 +1,21 @@
 {
   "endpoint": "api.westerweel.work",
-  "timestamp": "2026-10-14T05:18:31.820031+00:00",
+  "timestamp": "2026-10-15T05:18:31.508790+00:00",
   "api_version": "2.7.0",
-  "request_id": "91d5d63756360ab2d4474b2f66065523",
+  "request_id": "64b052ff688db70e0e4a7da1bfebac65",
   "request": {
-    "name": "demo-showcase 2026-10-14",
-    "submit_date": "2026-10-14T05:17:01.918954+00:00",
-    "finished_date": "2026-10-14T05:18:31.820031+00:00",
+    "name": "demo-showcase 2026-10-15",
+    "submit_date": "2026-10-15T05:17:01.943420+00:00",
+    "finished_date": "2026-10-15T05:18:31.508790+00:00",
     "request_type": "web",
     "status": "done",
-    "request_id": "91d5d63756360ab2d4474b2f66065523"
+    "request_id": "64b052ff688db70e0e4a7da1bfebac65"
   },
   "domains": {
     "api.westerweel.work": {
       "status": "ok",
       "report": {
-        "url": "https://netnl.westerweel.work/site/api.westerweel.work/574/"
+        "url": "https://netnl.westerweel.work/site/api.westerweel.work/577/"
       },
       "scoring": {
         "percentage": 96
@@ -205,7 +205,7 @@
     "westerweel.work": {
       "status": "ok",
       "report": {
-        "url": "https://netnl.westerweel.work/site/westerweel.work/575/"
+        "url": "https://netnl.westerweel.work/site/westerweel.work/578/"
       },
       "scoring": {
         "percentage": 95
@@ -395,7 +395,7 @@
     "netnl.westerweel.work": {
       "status": "ok",
       "report": {
-        "url": "https://netnl.westerweel.work/site/netnl.westerweel.work/576/"
+        "url": "https://netnl.westerweel.work/site/netnl.westerweel.work/579/"
       },
       "scoring": {
         "percentage": 72
